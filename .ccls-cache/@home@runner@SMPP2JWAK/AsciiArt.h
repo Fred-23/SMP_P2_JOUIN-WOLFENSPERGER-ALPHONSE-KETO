@@ -266,4 +266,16 @@ void display_splinter() {
           "!'`.::!!!!!!!!!!>:`!!!!!!!!"
        << endl;
 }
+
+void displayplateau(){
+  // Initialisation des noms des joueurs
+  std::string names[] = {"Leonardo", "Donatello", "Raphael", "Splinter", "Michelangelo"};
+
+  // Affichage du plateau de jeu
+  std::cout << "+---+---+---+---+---+---+---+---+---+---+\n";
+  for (int i = 1; i <= 10; i++) {
+    std::cout << "| " << names[i] << " |";
+  }
+  std::cout << "\n+---+---+---+---+---+---+---+---+---+---+\n";
+}
 #endif
