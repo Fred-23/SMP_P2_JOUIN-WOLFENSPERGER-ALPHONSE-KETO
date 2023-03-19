@@ -34,6 +34,24 @@ class Pizza {
     void moveTurtle(TargetTurtles pTarget, int amount);
   
     TargetTurtles checkVictory(void);
+
+   // operator overload for displaying the BoardGame:
+   //This function need to be improve to display multiple turtles
+    friend ostream &operator<<(ostream &os, Pizza &obj) {
+    os << "Pizza:" << endl;
+    for (int i = 0; i < NB_SLICES; i++) {
+        os << "[" << i << "]: ";
+        if (!obj.getSlice(i).empty()) {
+            for (auto& turtle : obj.getSlice(i)) {
+                os << getName(turtle) << " ";
+            }
+        } else {
+            os << "empty";
+        }
+        os << endl;
+    }
+    return os;
+  }
 };
 
 #endif

@@ -32,6 +32,7 @@ void GameMaster::startGame() {
 
   list<Turtle *>::iterator it = turtles.begin();
   do {
+    clearScreen();// F
     Card playedCard = (*it)->play(&unusedCards);
     usedCards.push_back(playedCard);
 
@@ -65,7 +66,8 @@ void GameMaster::showMenu() {
   clearScreen();
   displayTitleScreen();
   int choice;
-
+  // Display the board
+  cout << pizza << endl;
   displayMenuOptions();
   cin >> choice;
   while (choice <= 0 || choice > 3) {
@@ -81,8 +83,9 @@ void GameMaster::showMenu() {
   clearScreen();
   switch (choice) {
   case 1:
-    showStory();
+    // showStory();
     clearScreen();
+
     startGame();
     break;
   case 2:

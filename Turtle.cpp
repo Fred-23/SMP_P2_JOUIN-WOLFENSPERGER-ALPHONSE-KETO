@@ -15,7 +15,7 @@ void Turtle::initialDraw(list<Card> *pStack) {
 }
 
 Card Turtle::play(list<Card> *pStack) {
-  clearScreen();
+  //clearScreen();//FA
   displayTurtle();
   cout << "\033[0m" << endl;
   draw(pStack);
