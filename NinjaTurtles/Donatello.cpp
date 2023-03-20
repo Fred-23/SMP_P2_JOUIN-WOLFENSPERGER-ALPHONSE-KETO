@@ -3,7 +3,6 @@
 Donatello::Donatello() : Turtle(TargetTurtles::tDonatello) {}
 
 void Donatello::displayTurtle() const {
-  cout << "\033[2J\033[0;0H";
   cout << "\033[0;32m"
        << "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣤⣤⣤⣄⡀⠀⠀⠀⠀⢠⣤⣄⠀⣀⠀⠀" << endl;
   cout << "⠀⠀⠀⠀⠀⠀⠀⣠⣴⠟⠛⠉⠁⠀⠀⠈⠉⠛⠻⣦⣄⠀⢸⡟⠙⣿⡟⣷⡀" << endl;

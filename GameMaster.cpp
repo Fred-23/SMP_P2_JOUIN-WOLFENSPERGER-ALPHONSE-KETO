@@ -5,23 +5,23 @@ void GameMaster::effectInterpreter(Turtle turtle, Card card) {
   int effect = 0;
   list<TargetTurtles> choice;
   switch (card.getEffect()) {
-  case None:
-    break;       // make an exception here
-  case PlusPlus: // cartes ++ (avance de 2 cases la couleur concernée)
-    effect = 2;
-    break;
-  case Plus: // cartes + (avance de 1 case la couleur concernée
-    effect = 1;
-    break;
-  case Moins: // cartes − (recule de 1 case la couleur concernée)
-    effect = -1;
-    break;
-  case Haut:
-    choice = getPizza().findLatest();
-    break;
-  case HautHaut:
-    choice = getPizza().findLatest();
-    break;
+    case None:
+      break;       // make an exception here
+    case PlusPlus: // cartes ++ (avance de 2 cases la couleur concernée)
+      effect = 2;
+      break;
+    case Plus: // cartes + (avance de 1 case la couleur concernée
+      effect = 1;
+      break;
+    case Moins: // cartes − (recule de 1 case la couleur concernée)
+      effect = -1;
+      break;
+    case Haut:
+      choice = getPizza().findLatest();
+      break;
+    case HautHaut:
+      choice = getPizza().findLatest();
+      break;
   }
 }
 /*cout << "Number of Turtles?" << endl;
@@ -33,6 +33,7 @@ void GameMaster::startGame() {
   list<Turtle *>::iterator it = turtles.begin();
   do {
     clearScreen();// F
+    cout << pizza << endl;
     Card playedCard = (*it)->play(&unusedCards);
     usedCards.push_back(playedCard);
 
@@ -49,9 +50,11 @@ void GameMaster::initGame() {
   turtles = this->sewers.mutagene();
   // Generate Cards
   unusedCards = this->cardFactory.genCards();
-
+  
   // Turtles drawing cards
   for (auto &i : turtles) {
+    //Init the turtles on the board
+    //pizza.moveTurtle(i->getTurtleName(), 1);
     i->initialDraw(&unusedCards);
   }
 }
@@ -66,8 +69,7 @@ void GameMaster::showMenu() {
   clearScreen();
   displayTitleScreen();
   int choice;
-  // Display the board
-  cout << pizza << endl;
+
   displayMenuOptions();
   cin >> choice;
   while (choice <= 0 || choice > 3) {
