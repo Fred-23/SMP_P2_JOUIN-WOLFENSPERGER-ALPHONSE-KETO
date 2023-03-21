@@ -15,13 +15,6 @@ void Turtle::initialDraw(list<Card> *pStack) {
 }
 
 Card Turtle::play(list<Card> *pStack) {
-  //clearScreen();
-  displayTurtle();
-  cout << "\033[0m" << endl;
-  cout<<getName(this->getTurtleName())<<endl;
-  this_thread::sleep_for(chrono::milliseconds(4000));
-  clearScreen(); // FA
-  cout << "\033[0m" << endl;
   draw(pStack);
   return chooseCard();
 }
@@ -29,6 +22,7 @@ Card Turtle::play(list<Card> *pStack) {
 void Turtle::displayCards() {
   list<Card>::iterator it;
   int cIndex = 0;
+  cout << "Cards : " << endl;
   for (it = cards.begin(); it != cards.end(); it++) {
     cout << "[" << cIndex << "] - " << *it << endl;
     cIndex++;

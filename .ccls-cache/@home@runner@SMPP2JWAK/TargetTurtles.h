@@ -17,4 +17,6 @@ typedef enum {
 
 string getName(TargetTurtles target = TargetTurtles::tneutral);
 
+string getColor(TargetTurtles target = TargetTurtles::tneutral);
+
 #endif

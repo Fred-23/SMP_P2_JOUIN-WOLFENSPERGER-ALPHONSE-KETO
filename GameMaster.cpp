@@ -1,68 +1,151 @@
 #include "GameMaster.h"
 
-void GameMaster::effectInterpreter(Turtle turtle, Card card) {
+// builder :
+GameMaster::GameMaster() {
+  cardFactory = CardFactory();
+  sewers = Sewers();
+  pizza = Pizza();
+}
+
+void GameMaster::effectInterpreter(Turtle *turtle, Card card) {
   // switch
   int effect = 0;
+  TargetTurtles target = tneutral;
   list<TargetTurtles> choice;
   switch (card.getEffect()) {
-    case None:
-      break;       // make an exception here
-    case PlusPlus: // cartes ++ (avance de 2 cases la couleur concernée)
-      effect = 2;
-      break;
-    case Plus: // cartes + (avance de 1 case la couleur concernée
-      effect = 1;
-      break;
-    case Moins: // cartes − (recule de 1 case la couleur concernée)
-      effect = -1;
-      break;
-    case Haut:
-      choice = getPizza().findLatest();
-      break;
-    case HautHaut:
-      choice = getPizza().findLatest();
-      break;
+  case None:
+    break;       // make an exception here
+  case PlusPlus: // cartes ++ (avance de 2 cases la couleur concernée)
+    effect = 2;
+    break;
+  case Plus: // cartes + (avance de 1 case la couleur concernée
+    effect = 1;
+    break;
+  case Moins: // cartes − (recule de 1 case la couleur concernée)
+    effect = -1;
+    break;
+  case Haut:
+    choice = getPizza().findLatest();
+    effect = 1;
+    break;
+  case HautHaut:
+    choice = getPizza().findLatest();
+    effect = 2;
+    break;
+  }
+
+  if (choice.empty() == false) { // if the choice list contains turtles
+    // Browse each turtle in the list
+    cout << "\033[1;37m\t" << getName((turtle)->getTurtleName())
+         << ", choose among these last turtles:\033[0m" << endl;
+
+    list<TargetTurtles>::iterator it;
+    int tIndex = 0;
+    for (it = choice.begin(); it != choice.end(); ++it) {
+      cout << "[" << tIndex << "] - " << getName(*it) << endl;
+      tIndex++;
+    }
+
+    int turtle_choice;
+
+    cout << "\033[1;37mWhich turtle will you play "
+         << " ? : " << endl;
+    cin >> turtle_choice;
+
+    while (turtle_choice < 0 || turtle_choice >= choice.size() || !cin.good()) {
+      cin.clear();
+      cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+      cout << "\033[1;37mWhich turtle will you play "
+           << " ? : " << endl;
+      cin >> turtle_choice;
+    }
+
+    list<TargetTurtles>::iterator it2 = choice.begin();
+    advance(it2, turtle_choice);
+    target = *it2;
+  } else {
+    target = card.getTarget();
+    if (target == tneutral) { // if the card target is neutral
+      // the player have to choose between all the turtles the target
+      cout << "\033[1;37m\t" << getName((turtle)->getTurtleName())
+           << ", choose among these last turtles:\033[0m" << endl;
+      cout << "[1] - " << getName(tLeonardo) << endl;
+      cout << "[2] - " << getName(tRaphael) << endl;
+      cout << "[3] - " << getName(tDonatello) << endl;
+      cout << "[4] - " << getName(tMichelangelo) << endl;
+      cout << "[5] - " << getName(tSplinter) << endl;
+
+      int turtle_choice;
+
+      while (turtle_choice < 0 || turtle_choice > 5 || !cin.good()) {
+        cin.clear();
+        cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+        cout << "\033[1;37mWhich turtle will you play "
+             << " ? : " << endl;
+        cin >> turtle_choice;
+      }
+
+      switch (turtle_choice) {
+      case 1:
+        target = tLeonardo;
+        break;
+      case 2:
+        target = tRaphael;
+        break;
+      case 3:
+        target = tDonatello;
+        break;
+      case 4:
+        target = tMichelangelo;
+        break;
+      case 5:
+        target = tSplinter;
+        break;
+      }
+
+      pizza.moveTurtle(target, effect); // move the turtle on the pizza once the
+                                        // card is interpreted by the GameMaster
+    }
   }
 }
-/*cout << "Number of Turtles?" << endl;
-  cin >> numberOfTurtles ;*/
 
 void GameMaster::startGame() {
   initGame();
 
   list<Turtle *>::iterator it = turtles.begin();
+
   do {
-    clearScreen();// F
+    clearScreen();
+
+    (*it)->displayTurtle();
+
+    cout << "\033[1;37m\tIt's your turn " << getName((*it)->getTurtleName())
+         << " !!!\033[0m" << endl;
+    this_thread::sleep_for(chrono::milliseconds(5000));
+
+    clearScreen();
     cout << pizza << endl;
     Card playedCard = (*it)->play(&unusedCards);
     usedCards.push_back(playedCard);
+
+    // effectInterpreter(*it, playedCard);
 
     advance(it, 1);
     if (it == turtles.end()) {
       it = turtles.begin();
     }
-
-  } while (1); // Condition check win
+  } while (pizza.checkVictory() == tneutral); // Condition check win
+  cout << "You won " << getName(pizza.checkVictory()) << " !!";
 }
 
 void GameMaster::initGame() {
-  // Generate Turtles
   turtles = this->sewers.mutagene();
-  // Generate Cards
   unusedCards = this->cardFactory.genCards();
-  
-  // Turtles drawing cards
+
   for (auto &i : turtles) {
-    //Init the turtles on the board
-    //pizza.moveTurtle(i->getTurtleName(), 1);
+    pizza.initTurtle(i->getTurtleName());
     i->initialDraw(&unusedCards);
   }
-}
-
-GameMaster::GameMaster() {
-  cardFactory = CardFactory();
-  sewers = Sewers();
-  pizza = Pizza();
 }
 
 void GameMaster::showMenu() {
@@ -87,7 +170,6 @@ void GameMaster::showMenu() {
   case 1:
     // showStory();
     clearScreen();
-
     startGame();
     break;
   case 2:
@@ -99,50 +181,24 @@ void GameMaster::showMenu() {
 }
 
 void GameMaster::displayTitleScreen() {
-  std::cout
+  cout
       << " ____________________________________________________________________"
          "_____________________________________________________________________"
-         "_________________\n"
-      << " \\  @@@@ @@@@ @@@@  @@@    @@@    @@@@   @@@@    @@@@        ###    "
-         "###  ## ## ####  ###  ###   ## ####       **     **  ****  **     ** "
-         "      ***  ****  /  \n"
-      << "  \\   @   @    @     @@@@@  @@@    @  @   @       @          ## #  "
-         "# ##  ## ##  ##  ## ## ## #  ##  ##       ***    **   **   ***    ** "
-         "  *    **  ** ** /  \n"
-      << "   \\   @   @@   @@    @@@ @@ @@@    @@@@   @  @@   @@        ##  ## "
-         " ##  ## ##  ##  ##### ##  # ##  ##      **   * **   **   **   * **   "
-         " **  **  ***** /  \n"
-      << "    \\   @   @@@  @@@   @@@   @@@@    @  @   @@@@    @@@      ##     "
-         " ##   ###   ##  ## ## ##   ###  ##     **     **  ****  **     **    "
-         "  ***   ** ** /  \n"
-      << "     "
-         "\\___________________________________________________________________"
+         "___________________________________________________________________"
          "_____________________________________________________________________"
-         "________/\n"
-      << "                                    __ _    ____         ________    "
-         "___...-----...      `'-._          ``''--..__       .-''``''--..     "
-         "               \n"
-      << "                     /~-.-.-.-.-.-.- \\ ¥ \\   \\  :\\       |     : "
-         " `. :     ~         \\   / ~^ /         /   :     :\\     /  ^       "
-         " )              \n"
-      << "                    (       (   ~~|  \\ ' \\   \\   \\      |   ____ "
-         " `: :___      ___..-  /  >-/         /   /``''--..\\    |  ~ "
-         "|''--..``   \n"
-      << "                     '-.-'   >  -'    \\' '\\   \\ ` `.    |  |____) "
-         " )     |  ) |       /    /         / -'``''--..        \\ `  \\     "
-         "\n"
-      << "                          \\.`` )\\      `.   \\.,.\\ >-`.   |  :  "
-         "_.`.`      |_.- |      /    /         /   -/``''--..:   ____ '.`   "
-         "'.  \n"
-      << "                           \\  : \\      `.    .`     \\   |  : (   "
-         "`       |   *|     /  (  `'.-._   /    /            \\ ` `'--  : '.\n"
-      << "                            \\:   \\       \\       :   \\  |  :  \\ "
-         "  \\      |  - |    `'-._   (    |  \\'   `''--..      \\  `  ^     "
-         ".\n"
-      << "                             \\.-.-\\       \\.-.-.-.-.-.\\ |__:   "
-         "\\___\\     |____|         `'-.____\\   ``''--..__|        "
-         "`'-._____.'\n";
+         "________\n"
+      <<endl;
+
+  cout << " _________          _______ _________ _        _______  _______ " << endl;
+  cout << "|\\__   __/|\\     /|(  ____ )\\__   __/( \\      (  ____ \\(  ____ \\" << endl;
+  cout << "   ) (   | )   ( || (    )|   ) (   | (      | (    \\/| (    \\/" << endl;
+  cout << "   | |   | |   | || (____)|   | |   | |      | (__    | (_____ " << endl;
+  cout << "   | |   | |   | ||     __)   | |   | |      |  __)   (_____  )" << endl;
+  cout << "   | |   | |   | || (\\ (      | |   | |      | (            ) |" << endl;
+  cout << "   | |   | (___) || ) \\ \\__   | |   | (____/\\| (____/\\/\\____) |" << endl;
+  cout << "   )_(   (_______)|/   \\__/   )_(   (_______/(_______/\\_______)" << endl;
 }
+
 void GameMaster::displayMenuOptions() {
   std::cout << "\n\033[1;37m=== Main Menu ===" << std::endl;
   std::cout << "1. Start new game" << std::endl;
@@ -171,6 +227,7 @@ void GameMaster::showStory() {
     cin >> choice;
   }
 }
+
 void GameMaster::showRules() {
   printMessage(gameRulesText, 10);
   int choice;

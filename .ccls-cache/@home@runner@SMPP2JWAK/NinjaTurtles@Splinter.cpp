@@ -3,6 +3,7 @@
 Splinter::Splinter() : Turtle(TargetTurtles::tSplinter) {}
 
 void Splinter::displayTurtle() const {
+  cout<<"\033[0;33m"<<endl;
   cout << "                                                     ," << endl;
   cout << "                                                  ,-'" << endl;
   cout << "                                                ,d'e" << endl;
@@ -94,5 +95,5 @@ void Splinter::displayTurtle() const {
        << endl;
   cout << "                                             <  "
           "!'`.::!!!!!!!!!!>:`!!!!!!!!"
-       << endl;
+       << "\033[0"<<endl;
 }

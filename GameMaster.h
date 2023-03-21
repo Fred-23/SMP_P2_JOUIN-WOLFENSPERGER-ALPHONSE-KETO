@@ -40,10 +40,10 @@ private:
 
   string storyBlock1 =
       "\033[1;37mSplinter\033[0m : My dear turtles, we have a new important "
-      "mission. Shredder is back and his actions have caused too much harm to "
+      "mission. \033[1;37mShredder\033[0m is back and his actions have caused too much harm to "
       "the city. We need to stop him before he causes any more "
       "damage.\n\n\033[1;37mSplinter\033[0m: Our goal is to reach "
-      "\033[1;37mShredder on the last square, and stop him once and for all. "
+      "\033[1;37mShredder\033[0m on the last square, and stop him once and for all. "
       "But it won't be easy to reach him, there will be obstacles and enemies "
       "in our way.\n\n";
 
@@ -88,7 +88,7 @@ public:
   // read accessor :
   Pizza getPizza(void) { return pizza; }
   void showMenu();
-  void effectInterpreter(Turtle turtle, Card card);
+  void effectInterpreter(Turtle * turtle, Card card);
 };
 
 #endif
