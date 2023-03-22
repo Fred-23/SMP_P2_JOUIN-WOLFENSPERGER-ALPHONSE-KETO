@@ -24,10 +24,10 @@ public:
   list<TargetTurtles> getSlice(int index) { return *slices[index]; }
 
   list<TargetTurtles> findLatest(void); // find the last turtles
-
-  int findTurtle(TargetTurtles pTarget, int *sliceIndex);
-  list<TargetTurtles>::iterator findTurtleinSlice(TargetTurtles pTarget,
-                                                  int sliceIndex);
+  int findTurtle(TargetTurtles pTarget);
+  //int findTurtle(TargetTurtles pTarget, int *sliceIndex);
+  //list<TargetTurtles>::iterator findTurtleinSlice(TargetTurtles pTarget, int sliceIndex);
+  int findTurtleinSlice(TargetTurtles pTarget, int sliceIndex);
 
   void moveTurtle(TargetTurtles pTarget, int effect);
   // Init turtle on the board

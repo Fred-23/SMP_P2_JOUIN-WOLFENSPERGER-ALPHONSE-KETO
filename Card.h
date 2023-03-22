@@ -17,8 +17,7 @@ private:
 public:
   // builder :
   Card();
-  Card(TargetTurtles pTarget = TargetTurtles::tneutral,
-       CardEffects pEffect = CardEffects::None);
+  Card(TargetTurtles pTarget = TargetTurtles::tneutral, CardEffects pEffect = CardEffects::None);
   Card(CardEffects pEffect = CardEffects::None);
   Card(TargetTurtles pTarget = TargetTurtles::tneutral);
 
@@ -37,7 +36,7 @@ public:
   // operator overload for displaying :
   friend ostream &operator<<(ostream &os, const Card &obj) {
 
-    os << "Cible : " << getName(obj.getTarget())
+    os << "Cible : " << getName(obj.getTarget()) << endl
        << "Effet : " << getDescription(obj.getEffect()) << endl;
     return os;
   }

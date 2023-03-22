@@ -12,6 +12,7 @@ void GameMaster::effectInterpreter(Turtle *turtle, Card card) {
   int effect = 0;
   TargetTurtles target = tneutral;
   list<TargetTurtles> choice;
+  
   switch (card.getEffect()) {
   case None:
     break;       // make an exception here
@@ -77,7 +78,7 @@ void GameMaster::effectInterpreter(Turtle *turtle, Card card) {
 
       int turtle_choice;
 
-      while (turtle_choice < 0 || turtle_choice > 5 || !cin.good()) {
+      while (turtle_choice < 0 || turtle_choice > 5 || !cin.good())       {
         cin.clear();
         cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
         cout << "\033[1;37mWhich turtle will you play "
@@ -86,27 +87,27 @@ void GameMaster::effectInterpreter(Turtle *turtle, Card card) {
       }
 
       switch (turtle_choice) {
-      case 1:
-        target = tLeonardo;
-        break;
-      case 2:
-        target = tRaphael;
-        break;
-      case 3:
-        target = tDonatello;
-        break;
-      case 4:
-        target = tMichelangelo;
-        break;
-      case 5:
-        target = tSplinter;
-        break;
+        case 1:
+          target = tLeonardo;
+          break;
+        case 2:
+          target = tRaphael;
+          break;
+        case 3:
+          target = tDonatello;
+          break;
+        case 4:
+          target = tMichelangelo;
+          break;
+        case 5:
+          target = tSplinter;
+          break;
       }
-
-      pizza.moveTurtle(target, effect); // move the turtle on the pizza once the
-                                        // card is interpreted by the GameMaster
     }
   }
+  
+  pizza.moveTurtle(target, effect); // move the turtle on the pizza once the
+                                        // card is interpreted by the GameMaster
 }
 
 void GameMaster::startGame() {
@@ -128,7 +129,7 @@ void GameMaster::startGame() {
     Card playedCard = (*it)->play(&unusedCards);
     usedCards.push_back(playedCard);
 
-    // effectInterpreter(*it, playedCard);
+    effectInterpreter(*it, playedCard);
 
     advance(it, 1);
     if (it == turtles.end()) {
@@ -168,7 +169,7 @@ void GameMaster::showMenu() {
   clearScreen();
   switch (choice) {
   case 1:
-    // showStory();
+    //showStory();
     clearScreen();
     startGame();
     break;
@@ -187,16 +188,25 @@ void GameMaster::displayTitleScreen() {
          "___________________________________________________________________"
          "_____________________________________________________________________"
          "________\n"
-      <<endl;
+      << endl;
 
-  cout << " _________          _______ _________ _        _______  _______ " << endl;
-  cout << "|\\__   __/|\\     /|(  ____ )\\__   __/( \\      (  ____ \\(  ____ \\" << endl;
-  cout << "   ) (   | )   ( || (    )|   ) (   | (      | (    \\/| (    \\/" << endl;
-  cout << "   | |   | |   | || (____)|   | |   | |      | (__    | (_____ " << endl;
-  cout << "   | |   | |   | ||     __)   | |   | |      |  __)   (_____  )" << endl;
-  cout << "   | |   | |   | || (\\ (      | |   | |      | (            ) |" << endl;
-  cout << "   | |   | (___) || ) \\ \\__   | |   | (____/\\| (____/\\/\\____) |" << endl;
-  cout << "   )_(   (_______)|/   \\__/   )_(   (_______/(_______/\\_______)" << endl;
+  cout << " _________          _______ _________ _        _______  _______ "
+       << endl;
+  cout << "|\\__   __/|\\     /|(  ____ )\\__   __/( \\      (  ____ \\(  ____ "
+          "\\"
+       << endl;
+  cout << "   ) (   | )   ( || (    )|   ) (   | (      | (    \\/| (    \\/"
+       << endl;
+  cout << "   | |   | |   | || (____)|   | |   | |      | (__    | (_____ "
+       << endl;
+  cout << "   | |   | |   | ||     __)   | |   | |      |  __)   (_____  )"
+       << endl;
+  cout << "   | |   | |   | || (\\ (      | |   | |      | (            ) |"
+       << endl;
+  cout << "   | |   | (___) || ) \\ \\__   | |   | (____/\\| (____/\\/\\____) |"
+       << endl;
+  cout << "   )_(   (_______)|/   \\__/   )_(   (_______/(_______/\\_______)"
+       << endl;
 }
 
 void GameMaster::displayMenuOptions() {
